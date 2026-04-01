@@ -1,0 +1,130 @@
+.app-shell {
+	min-height: 100vh;
+	background: var(--bs-secondary-bg);
+}
+
+.loader-backdrop {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.3);
+	display: grid;
+	place-items: center;
+	z-index: 1080;
+	backdrop-filter: blur(2px);
+}
+
+.loader-panel {
+	width: min(92vw, 320px);
+	background: var(--bs-body-bg);
+	border: 1px solid var(--bs-border-color);
+	border-radius: 1rem;
+	padding: 1.25rem;
+	box-shadow: var(--bs-box-shadow);
+}
+
+.loading-logo {
+	animation: pulse-logo 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse-logo {
+	0% {
+		transform: scale(1);
+		opacity: 0.95;
+	}
+	50% {
+		transform: scale(1.06);
+		opacity: 1;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 0.95;
+	}
+}
+
+.app-toast {
+	border: 1px solid var(--bs-border-color);
+	box-shadow: var(--bs-box-shadow-sm);
+}
+
+.nav-pills .nav-link {
+	border: 1px solid var(--bs-border-color);
+	background: var(--bs-body-bg);
+	font-weight: 500;
+}
+
+.nav-pills .nav-link.active {
+    color: #3b4549;
+	box-shadow: var(--bs-box-shadow-sm);
+}
+
+.brand-logo {
+	object-fit: contain;
+	background: var(--bs-body-bg);
+	border: 1px solid var(--bs-border-color);
+	padding: 0.25rem;
+}
+
+.master-list {
+	max-height: 16rem;
+	overflow-y: auto;
+}
+
+.table-action-col {
+	width: 7rem;
+}
+
+.table-action-col-wide {
+	width: 14rem;
+}
+
+.table td,
+.table th {
+	vertical-align: middle;
+}
+
+.card {
+	border-radius: 0.75rem;
+}
+
+.app-view-modal {
+	z-index: 1065;
+}
+
+.challan-view-header {
+	background: var(--bs-light);
+	border-bottom: 1px solid var(--bs-border-color);
+}
+
+.preview-pill {
+	background: var(--bs-body-tertiary);
+	border: 1px solid var(--bs-border-color);
+	border-radius: 0.65rem;
+	padding: 0.5rem 0.75rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.preview-pill .label {
+	font-size: 0.75rem;
+	color: var(--bs-secondary-color);
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+}
+
+.preview-pill .value {
+	font-size: 0.9rem;
+	font-weight: 600;
+}
+
+.app-delete-modal {
+	z-index: 1070;
+}
+
+.app-delete-modal .modal-content {
+	border-radius: 1rem;
+}
+
+.app-delete-modal .modal-body {
+	background: linear-gradient(180deg, var(--bs-light) 0%, var(--bs-body-bg) 100%);
+}
