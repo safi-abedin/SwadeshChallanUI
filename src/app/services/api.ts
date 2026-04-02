@@ -28,7 +28,7 @@ export class ApiService {
   }
 
   deleteCompany(id: number): Observable<string> {
-    return this.http.delete(`${this.baseUrl}/company/${id}`, { responseType: 'text' });
+    return this.http.post(`${this.baseUrl}/company/delete/${id}`, null, { responseType: 'text' });
   }
 
   // BUYER
@@ -41,7 +41,7 @@ export class ApiService {
   }
 
   deleteBuyer(id: number): Observable<string> {
-    return this.http.delete(`${this.baseUrl}/buyer/${id}`, { responseType: 'text' });
+    return this.http.post(`${this.baseUrl}/buyer/delete/${id}`, null, { responseType: 'text' });
   }
 
   // CHALLAN
@@ -58,11 +58,11 @@ export class ApiService {
   }
 
   updateChallan(id: number, data: ChallanDto): Observable<void> {
-    return this.http.put<void>(`${this.baseUrl}/challan/${id}`, data);
+    return this.http.post<void>(`${this.baseUrl}/challan/edit/${id}`, data);
   }
 
   deleteChallan(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/challan/${id}`);
+    return this.http.post<void>(`${this.baseUrl}/challan/delete/${id}`, null);
   }
 
   getChallanPdf(id: number): Observable<Blob> {
