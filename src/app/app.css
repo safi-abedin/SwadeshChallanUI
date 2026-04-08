@@ -128,3 +128,69 @@
 .app-delete-modal .modal-body {
 	background: linear-gradient(180deg, var(--bs-light) 0%, var(--bs-body-bg) 100%);
 }
+
+.challan-form-card {
+	background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+	border: 1px solid #e8edf5;
+}
+
+.challan-form-stack .form-control,
+.challan-form-stack .form-select {
+	border-radius: 0.65rem;
+	border-color: #d8e1ee;
+	transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.challan-form-stack .form-control:focus,
+.challan-form-stack .form-select:focus {
+	border-color: #5b8def;
+	box-shadow: 0 0 0 0.2rem rgba(91, 141, 239, 0.15);
+}
+
+.style-panel {
+	background: linear-gradient(180deg, #f8fbff 0%, #f3f8ff 100%);
+	border-color: #dbe7f7 !important;
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.item-panel {
+	border-color: #dde6f2 !important;
+	box-shadow: 0 4px 14px rgba(27, 44, 74, 0.06);
+}
+
+.reference-table thead th {
+	font-size: 0.78rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #596579;
+}
+
+.btn-gradient-primary {
+	background: linear-gradient(135deg, #2d79f3 0%, #1a5ed1 100%);
+	border: none;
+	box-shadow: 0 8px 18px rgba(26, 94, 209, 0.25);
+}
+
+.btn-gradient-success {
+	background: linear-gradient(135deg, #2ea364 0%, #258450 100%);
+	border: none;
+	box-shadow: 0 8px 18px rgba(37, 132, 80, 0.25);
+}
+
+.btn-gradient-primary:hover,
+.btn-gradient-success:hover {
+	filter: brightness(1.03);
+	transform: translateY(-1px);
+}
+
+.challan-edit-content {
+	border: 1px solid #dfe8f5;
+	border-radius: 1rem;
+	overflow: hidden;
+}
+
+.edit-form-stack {
+	max-height: 72vh;
+	overflow-y: auto;
+	padding-right: 0.25rem;
+}

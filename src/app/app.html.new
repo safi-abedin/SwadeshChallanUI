@@ -69,7 +69,6 @@
       <app-challan-form 
         [companies]="companies()" 
         [buyers]="buyers()" 
-        [products]="products()"
         [isSubmitting]="isSubmitting()"
         (onSubmitted)="onChallanFormSubmit($event)">
       </app-challan-form>
@@ -77,29 +76,19 @@
 
     @if (activeTab() === 'masters') {
       <div class="row g-4">
-        <div class="col-12 col-xl-4">
+        <div class="col-12 col-xl-6">
           <app-company-master 
             [companies]="companies()"
             (onCompanyAdded)="onCompanyAdded()"
-            (onCompanyUpdated)="onCompanyUpdated()"
             (onCompanyDeleted)="onCompanyDeleted()"
           ></app-company-master>
         </div>
-        <div class="col-12 col-xl-4">
+        <div class="col-12 col-xl-6">
           <app-buyer-master 
             [buyers]="buyers()"
             (onBuyerAdded)="onBuyerAdded()"
-            (onBuyerUpdated)="onBuyerUpdated()"
             (onBuyerDeleted)="onBuyerDeleted()"
           ></app-buyer-master>
-        </div>
-        <div class="col-12 col-xl-4">
-          <app-product-master
-            [products]="products()"
-            (onProductAdded)="onProductAdded()"
-            (onProductUpdated)="onProductUpdated()"
-            (onProductDeleted)="onProductDeleted()"
-          ></app-product-master>
         </div>
       </div>
     }
@@ -109,24 +98,10 @@
         [challans]="challans()" 
         [companies]="companies()" 
         [buyers]="buyers()"
-        [pageNumber]="pageNumber()"
-        [pageSize]="pageSize()"
-        [totalCount]="totalCount()"
-        [totalPages]="totalPages()"
-        [hasNextPage]="hasNextPage()"
-        [hasPreviousPage]="hasPreviousPage()"
-        [search]="search()"
-        [sortBy]="sortBy()"
-        [sortOrder]="sortOrder()"
         (onView)="viewChallan($event)"
         (onEdit)="editChallan($event)"
         (onDelete)="openDeleteModal($event)"
         (onDownloadPdf)="downloadPdf($event)"
-        (onSearch)="onSearchChallans($event)"
-        (onSortByChange)="onSortByChange($event)"
-        (onSortOrderChange)="onSortOrderChange($event)"
-        (onPageChange)="onPageChange($event)"
-        (onResetFilters)="onResetFilters()"
       ></app-challan-list>
     }
   </div>
@@ -150,7 +125,6 @@
       [challanToEdit]="editingChallan()"
       [companies]="companies()"
       [buyers]="buyers()"
-      [products]="products()"
       [isUpdating]="isUpdating()"
       (onClose)="closeEditModal()"
       (onSubmit)="submitEditChallan($event)"

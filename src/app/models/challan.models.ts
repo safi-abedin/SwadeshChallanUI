@@ -9,6 +9,11 @@ export interface Buyer {
   name: string;
 }
 
+export interface Product {
+  id: number;
+  name: string;
+}
+
 export interface ChallanItem {
   id?: number;
   description?: string;
@@ -17,7 +22,7 @@ export interface ChallanItem {
   height?: number;
   ply: number;
   caseOrPacket?: number;
-  perCaseOrPacket?: number;
+  packets?: string[];
   totalQuantity?: number;
   referenceItems?: ReferenceItem[];
 }
@@ -25,23 +30,33 @@ export interface ChallanItem {
 export interface ReferenceItem {
   id?: number;
   referenceDescription: string;
-  caseOrPacket: number;
-  perCaseOrPacket: number;
-  totalQuantity: number;
+  caseOrPacket?: number;
+  packets?: string[];
+  totalQuantity?: number;
+}
+
+export interface Style {
+  id?: number;
+  name: string;
+  caseOrPacket?: number;
+  packets?: string[];
+  totalQuantity?: number;
+  challanItems?: ChallanItem[];
 }
 
 export interface Challan {
   id: number;
   challanNo: string;
   date: string;
-  poNo: string;
+  poNos?: string[];
+  jobNo: string;
+  productId: number;
   productName: string;
-  sty?: string;
+  styles: Style[];
   companyId: number;
   buyerId: number;
   company?: Company;
   buyer?: Buyer;
-  challanItems: ChallanItem[];
 }
 
 export interface CreateCompanyRequest {
@@ -53,14 +68,40 @@ export interface CreateBuyerRequest {
   name: string;
 }
 
+export interface UpdateBuyerRequest {
+  name: string;
+}
+
+export interface CreateProductRequest {
+  name: string;
+}
+
+export interface UpdateProductRequest {
+  name: string;
+}
+
+export interface UpdateCompanyRequest {
+  name: string;
+  address: string;
+}
+
 export interface ChallanDto {
   companyId: number;
   buyerId: number;
+  productId: number;
   date: string;
-  poNo: string;
+  poNos?: string[];
+  jobNo: string;
   productName: string;
-  sty?: string;
-  challanItems: ChallanItemDto[];
+  styles: StyleDto[];
+}
+
+export interface StyleDto {
+  name: string;
+  caseOrPacket?: number;
+  packets?: string[];
+  totalQuantity?: number;
+  challanItems?: ChallanItemDto[];
 }
 
 export interface ChallanItemDto {
@@ -70,14 +111,24 @@ export interface ChallanItemDto {
   height?: number;
   ply: number;
   caseOrPacket?: number;
-  perCaseOrPacket?: number;
+  packets?: string[];
   totalQuantity?: number;
   referenceItems?: ReferenceItemDto[];
 }
 
 export interface ReferenceItemDto {
   referenceDescription: string;
-  caseOrPacket: number;
-  perCaseOrPacket: number;
-  totalQuantity: number;
+  caseOrPacket?: number;
+  packets?: string[];
+  totalQuantity?: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  totalCount: number;
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
