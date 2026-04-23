@@ -239,28 +239,39 @@
 	position: relative;
 }
 
-.masters-search-box .form-control-sm {
-	padding: 0.5rem 2rem 0.5rem 0.75rem;
+.masters-search-input {
+	min-height: 3rem;
+	padding: 0.75rem 1rem;
 	border: 1px solid #d8e1ee;
-	border-radius: 0.5rem;
+	border-radius: 0.65rem;
 	background: var(--bs-body-bg);
 	transition: all 0.2s ease;
-	font-size: 0.95rem;
+	font-size: 1rem;
 }
 
-.masters-search-box .form-control-sm:focus {
+.masters-search-input:focus {
 	border-color: #5b8def;
 	box-shadow: 0 0 0 0.2rem rgba(91, 141, 239, 0.1);
 	outline: none;
 }
 
-.masters-search-box .btn-ghost {
+.masters-search-clear {
+	min-width: 6rem;
+	border-radius: 0.65rem;
+	font-weight: 500;
 	color: #8a97b0;
-	font-size: 1.1rem;
 }
 
-.masters-search-box .btn-ghost:hover {
+.masters-search-clear:hover {
 	color: #2d79f3;
+}
+
+.search-highlight {
+	background: #fff2a8;
+	color: inherit;
+	padding: 0 0.1rem;
+	border-radius: 0.2rem;
+	font-weight: 600;
 }
 
 /* Scrollable Masters Container */

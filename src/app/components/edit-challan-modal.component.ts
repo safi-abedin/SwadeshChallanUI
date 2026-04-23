@@ -65,7 +65,7 @@ type ChallanFormGroup = FormGroup<{
                   <div class="col-12 col-md-3"><label class="form-label">Product Name <span class="text-danger">*</span></label><select formControlName="productId" class="form-select" [class.is-invalid]="showError(editChallanForm.controls.productId)" (change)="onProductSelected()"><option [ngValue]="0">Select Product</option>@for (product of products(); track product.id) {<option [ngValue]="product.id">{{ product.name }}</option>}</select></div>
                   <div class="col-12 col-md-6" formArrayName="poNos">
                     <div class="d-flex align-items-center justify-content-between mb-2">
-                      <label class="form-label mb-0">PO Number(s) <span class="text-danger">*</span></label>
+                      <label class="form-label mb-0">PO Number(s)</label>
                       <button type="button" class="btn btn-outline-primary btn-sm" (click)="addPoNo()">Add PO</button>
                     </div>
                     <div class="vstack gap-2">
@@ -495,7 +495,7 @@ export class EditChallanModalComponent {
   }
 
   private createPoNoControl(value = ''): FormControl<string> {
-    return this.fb.control(value, [Validators.required, Validators.maxLength(100)]);
+    return this.fb.control(value, [Validators.maxLength(100)]);
   }
 
   private normalizePoNumbers(values: string[]): string[] | undefined {

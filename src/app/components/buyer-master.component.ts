@@ -5,6 +5,7 @@ import { ApiService } from '../services/api';
 import { ToasterService } from '../services/toaster';
 import { Buyer, CreateBuyerRequest, UpdateBuyerRequest } from '../models/challan.models';
 import { DeleteConfirmationModalComponent } from './delete-confirmation-modal.component';
+import { splitSearchHighlight } from './master-search-highlight';
 
 type BuyerFormGroup = FormGroup<{
   name: FormControl<string>;
@@ -25,7 +26,15 @@ type BuyerFormGroup = FormGroup<{
         <div class="vstack gap-2" aria-label="Buyer list">
           @for (buyer of filteredBuyers(); track buyer.id) {
             <div class="master-item d-flex align-items-center justify-content-between gap-2">
-              <div class="fw-semibold">{{ buyer.name }}</div>
+              <div class="fw-semibold">
+                @for (segment of highlightSegments(buyer.name); track $index) {
+                  @if (segment.matched) {
+                    <mark class="search-highlight">{{ segment.text }}</mark>
+                  } @else {
+                    <span>{{ segment.text }}</span>
+                  }
+                }
+              </div>
               <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-outline-warning btn-sm" (click)="startEdit(buyer)">Edit</button>
                 <button type="button" class="btn btn-outline-danger btn-sm" (click)="confirmDeleteBuyer(buyer)">Delete</button>
@@ -133,6 +142,10 @@ export class BuyerMasterComponent {
       return buyers;
     }
   });
+
+  highlightSegments(text: string) {
+    return splitSearchHighlight(text, this.searchQuery());
+  }
 
   readonly buyerForm: BuyerFormGroup = this.fb.group({
     name: this.fb.control('', [Validators.required, Validators.maxLength(100)])

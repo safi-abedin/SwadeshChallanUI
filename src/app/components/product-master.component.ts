@@ -6,6 +6,7 @@ import { ApiService } from '../services/api';
 import { ToasterService } from '../services/toaster';
 import { CreateProductRequest, Product, UpdateProductRequest } from '../models/challan.models';
 import { DeleteConfirmationModalComponent } from './delete-confirmation-modal.component';
+import { splitSearchHighlight } from './master-search-highlight';
 
 type ProductFormGroup = FormGroup<{
   name: FormControl<string>;
@@ -26,7 +27,15 @@ type ProductFormGroup = FormGroup<{
         <div class="vstack gap-2" aria-label="Product list">
           @for (product of filteredProducts(); track product.id) {
             <div class="master-item d-flex align-items-center justify-content-between gap-2">
-              <div class="fw-semibold">{{ product.name }}</div>
+              <div class="fw-semibold">
+                @for (segment of highlightSegments(product.name); track $index) {
+                  @if (segment.matched) {
+                    <mark class="search-highlight">{{ segment.text }}</mark>
+                  } @else {
+                    <span>{{ segment.text }}</span>
+                  }
+                }
+              </div>
               <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-outline-warning btn-sm" (click)="startEdit(product)">Edit</button>
                 <button type="button" class="btn btn-outline-danger btn-sm" (click)="confirmDeleteProduct(product)">Delete</button>
@@ -133,6 +142,10 @@ export class ProductMasterComponent {
       return products;
     }
   });
+
+  highlightSegments(text: string) {
+    return splitSearchHighlight(text, this.searchQuery());
+  }
 
   readonly productForm: ProductFormGroup = this.fb.group({
     name: this.fb.control('', [Validators.required, Validators.maxLength(120)])

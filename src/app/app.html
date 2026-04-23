@@ -118,23 +118,23 @@
             </div>
 
             <!-- Search Box with Regex Support -->
-            <div class="position-relative">
+            <div class="masters-search-box d-flex flex-column flex-md-row align-items-stretch gap-2">
               <input 
                 type="text" 
-                class="form-control form-control-sm pe-4" 
-                placeholder="🔍 Search e.g., '^A|^B' for names starting with A or B"
+                class="form-control form-control-lg masters-search-input" 
+                placeholder="Search by name, address, or regex"
                 [value]="masterSearchQuery()"
                 (input)="masterSearchQuery.set($any($event.target).value)"
                 aria-label="Search masters with regex support">
-              <button 
-                type="button" 
-                class="btn btn-sm btn-ghost position-absolute end-1 top-50 translate-middle-y"
-                (click)="masterSearchQuery.set('')"
-                *ngIf="masterSearchQuery()"
-                aria-label="Clear search"
-                style="border: none; background: none; padding: 0; line-height: 1;">
-                ✕
-              </button>
+              @if (masterSearchQuery()) {
+                <button 
+                  type="button" 
+                  class="btn btn-outline-secondary btn-lg masters-search-clear"
+                  (click)="masterSearchQuery.set('')"
+                  aria-label="Clear search">
+                  Clear
+                </button>
+              }
             </div>
           </div>
 

@@ -5,6 +5,7 @@ import { ApiService } from '../services/api';
 import { ToasterService } from '../services/toaster';
 import { Company, CreateCompanyRequest, UpdateCompanyRequest } from '../models/challan.models';
 import { DeleteConfirmationModalComponent } from './delete-confirmation-modal.component';
+import { splitSearchHighlight } from './master-search-highlight';
 
 type CompanyFormGroup = FormGroup<{
   name: FormControl<string>;
@@ -27,8 +28,24 @@ type CompanyFormGroup = FormGroup<{
           @for (company of filteredCompanies(); track company.id) {
             <div class="master-item d-flex align-items-start justify-content-between gap-2">
               <div>
-                <div class="fw-semibold">{{ company.name }}</div>
-                <div class="text-body-secondary">{{ company.address }}</div>
+                <div class="fw-semibold">
+                  @for (segment of highlightSegments(company.name); track $index) {
+                    @if (segment.matched) {
+                      <mark class="search-highlight">{{ segment.text }}</mark>
+                    } @else {
+                      <span>{{ segment.text }}</span>
+                    }
+                  }
+                </div>
+                <div class="text-body-secondary">
+                  @for (segment of highlightSegments(company.address); track $index) {
+                    @if (segment.matched) {
+                      <mark class="search-highlight">{{ segment.text }}</mark>
+                    } @else {
+                      <span>{{ segment.text }}</span>
+                    }
+                  }
+                </div>
               </div>
               <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-outline-warning btn-sm" (click)="startEdit(company)">Edit</button>
@@ -149,6 +166,10 @@ export class CompanyMasterComponent {
       return companies;
     }
   });
+
+  highlightSegments(text: string) {
+    return splitSearchHighlight(text, this.searchQuery());
+  }
 
   readonly companyForm: CompanyFormGroup = this.fb.group({
     name: this.fb.control('', [Validators.required, Validators.maxLength(100)]),
