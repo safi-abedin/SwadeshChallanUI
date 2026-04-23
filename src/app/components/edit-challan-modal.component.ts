@@ -201,7 +201,7 @@ type ChallanFormGroup = FormGroup<{
                 </div>
               </form>
 
-              <details class="mt-4 border-top pt-3">
+              <!-- <details class="mt-4 border-top pt-3">
                 <summary class="fw-semibold small text-uppercase text-body-secondary">Debug values</summary>
                 <div class="row g-3 mt-2">
                   <div class="col-12 col-lg-6">
@@ -213,7 +213,7 @@ type ChallanFormGroup = FormGroup<{
                     <pre class="bg-body-tertiary border rounded p-3 small mb-0 overflow-auto">{{ editChallanForm.getRawValue() | json }}</pre>
                   </div>
                 </div>
-              </details>
+              </details> -->
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-outline-secondary" (click)="onClose.emit()">Cancel</button>
