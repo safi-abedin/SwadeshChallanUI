@@ -35,8 +35,6 @@
           <div class="text-end small" aria-live="polite">
             @if (isLoading()) {
               <span class="text-body-secondary">Loading data...</span>
-            } @else {
-              <div class="text-body-secondary mb-1">{{ challans().length }} challans available</div>
             }
             @if (currentUser(); as user) {
               <div class="small text-primary fw-semibold">{{ user.displayName }}</div>
