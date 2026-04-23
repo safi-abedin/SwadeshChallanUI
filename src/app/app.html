@@ -76,30 +76,100 @@
     }
 
     @if (activeTab() === 'masters') {
-      <div class="row g-4">
-        <div class="col-12 col-xl-4">
-          <app-company-master 
-            [companies]="companies()"
-            (onCompanyAdded)="onCompanyAdded()"
-            (onCompanyUpdated)="onCompanyUpdated()"
-            (onCompanyDeleted)="onCompanyDeleted()"
-          ></app-company-master>
-        </div>
-        <div class="col-12 col-xl-4">
-          <app-buyer-master 
-            [buyers]="buyers()"
-            (onBuyerAdded)="onBuyerAdded()"
-            (onBuyerUpdated)="onBuyerUpdated()"
-            (onBuyerDeleted)="onBuyerDeleted()"
-          ></app-buyer-master>
-        </div>
-        <div class="col-12 col-xl-4">
-          <app-product-master
-            [products]="products()"
-            (onProductAdded)="onProductAdded()"
-            (onProductUpdated)="onProductUpdated()"
-            (onProductDeleted)="onProductDeleted()"
-          ></app-product-master>
+      <div class="card border-0 shadow-sm h-auto">
+        <div class="card-body p-0 d-flex flex-column" style="height: 100vh; max-height: calc(100vh - 250px);">
+          <!-- Professional Tab Header -->
+          <div class="px-4 py-3 border-bottom bg-body-tertiary">
+            <h2 class="h5 mb-3 text-dark fw-semibold">Master Data Management</h2>
+            
+            <!-- Tab Navigation with Icons -->
+            <div role="tablist" class="d-flex gap-1 mb-3 flex-wrap" aria-label="Masters navigation tabs">
+              <button 
+                type="button" 
+                class="btn btn-sm transition-all"
+                [class.btn-primary]="activeMasterTab() === 'company'"
+                [class.btn-outline-secondary]="activeMasterTab() !== 'company'"
+                (click)="setActiveMasterTab('company')"
+                aria-label="Company Master Tab"
+                role="tab"
+                [attr.aria-selected]="activeMasterTab() === 'company'">
+                <span class="me-2">🏢</span>Company Master
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-sm transition-all"
+                [class.btn-primary]="activeMasterTab() === 'buyer'"
+                [class.btn-outline-secondary]="activeMasterTab() !== 'buyer'"
+                (click)="setActiveMasterTab('buyer')"
+                aria-label="Buyer Master Tab"
+                role="tab"
+                [attr.aria-selected]="activeMasterTab() === 'buyer'">
+                <span class="me-2">👤</span>Buyer Master
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-sm transition-all"
+                [class.btn-primary]="activeMasterTab() === 'product'"
+                [class.btn-outline-secondary]="activeMasterTab() !== 'product'"
+                (click)="setActiveMasterTab('product')"
+                aria-label="Product Master Tab"
+                role="tab"
+                [attr.aria-selected]="activeMasterTab() === 'product'">
+                <span class="me-2">📦</span>Product Master
+              </button>
+            </div>
+
+            <!-- Search Box with Regex Support -->
+            <div class="position-relative">
+              <input 
+                type="text" 
+                class="form-control form-control-sm pe-4" 
+                placeholder="🔍 Search (supports regex)... e.g., '^A|^B' for names starting with A or B"
+                [value]="masterSearchQuery()"
+                (input)="masterSearchQuery.set($any($event.target).value)"
+                aria-label="Search masters with regex support">
+              <button 
+                type="button" 
+                class="btn btn-sm btn-ghost position-absolute end-1 top-50 translate-middle-y"
+                (click)="masterSearchQuery.set('')"
+                *ngIf="masterSearchQuery()"
+                aria-label="Clear search"
+                style="border: none; background: none; padding: 0; line-height: 1;">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- Scrollable Master List Container -->
+          <div class="flex-grow-1 overflow-y-auto px-4 py-3" style="min-height: 400px;">
+            @if (activeMasterTab() === 'company') {
+              <app-company-master 
+                [companies]="companies()"
+                [searchQuery]="masterSearchQuery()"
+                (onCompanyAdded)="onCompanyAdded()"
+                (onCompanyUpdated)="onCompanyUpdated()"
+                (onCompanyDeleted)="onCompanyDeleted()"
+              ></app-company-master>
+            }
+            @if (activeMasterTab() === 'buyer') {
+              <app-buyer-master 
+                [buyers]="buyers()"
+                [searchQuery]="masterSearchQuery()"
+                (onBuyerAdded)="onBuyerAdded()"
+                (onBuyerUpdated)="onBuyerUpdated()"
+                (onBuyerDeleted)="onBuyerDeleted()"
+              ></app-buyer-master>
+            }
+            @if (activeMasterTab() === 'product') {
+              <app-product-master
+                [products]="products()"
+                [searchQuery]="masterSearchQuery()"
+                (onProductAdded)="onProductAdded()"
+                (onProductUpdated)="onProductUpdated()"
+                (onProductDeleted)="onProductDeleted()"
+              ></app-product-master>
+            }
+          </div>
         </div>
       </div>
     }
@@ -165,5 +235,26 @@
       (onCancel)="closeDeleteModal()"
       (onConfirm)="confirmDeleteChallan($event)"
     ></app-delete-challan-modal>
+  }
+
+  <!-- View Confirmation Dialog for Newly Created Challan -->
+  @if (showViewConfirmation()) {
+    <div class="modal d-block position-fixed top-0 start-0 w-100 h-100" style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050;" role="dialog" aria-labelledby="viewConfirmationTitle">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0">
+          <div class="modal-header border-0">
+            <h2 class="modal-title fs-5" id="viewConfirmationTitle">View Newly Created Challan?</h2>
+            <button type="button" class="btn-close" (click)="skipViewNewChallan()" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted mb-0">Would you like to view the details of the newly created challan?</p>
+          </div>
+          <div class="modal-footer border-0 gap-2">
+            <button type="button" class="btn btn-secondary" (click)="skipViewNewChallan()">Skip</button>
+            <button type="button" class="btn btn-primary" (click)="viewNewChallan()">View Challan</button>
+          </div>
+        </div>
+      </div>
+    </div>
   }
 </main>

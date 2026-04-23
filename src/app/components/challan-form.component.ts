@@ -54,10 +54,6 @@ type ChallanFormGroup = FormGroup<{
         <form [formGroup]="challanForm" (ngSubmit)="submitChallan()" class="vstack gap-4 challan-form-stack" novalidate>
           <div class="row g-3">
             <div class="col-12 col-md-6">
-              <label class="form-label">Challan No (Auto Generated)</label>
-              <input type="text" class="form-control" disabled [value]="challanNoPreview()" readonly>
-            </div>
-            <div class="col-12 col-md-6">
               <label for="companyId" class="form-label">Company <span class="text-danger">*</span></label>
               <select id="companyId" formControlName="companyId" class="form-select" [class.is-invalid]="showError(challanForm.controls.companyId)">
                 <option [ngValue]="0">Select Company</option>
@@ -94,7 +90,7 @@ type ChallanFormGroup = FormGroup<{
             </div>
             <div class="col-12 col-md-6" formArrayName="poNos">
               <div class="d-flex align-items-center justify-content-between mb-2">
-                <label class="form-label mb-0">PO Number(s) <span class="text-danger">*</span></label>
+                <label class="form-label mb-0">PO Number(s)</label>
                 <button type="button" class="btn btn-outline-primary btn-sm" (click)="addPoNo()">Add PO</button>
               </div>
               <div class="vstack gap-2">
@@ -484,7 +480,7 @@ export class ChallanFormComponent {
   }
 
   private createPoNoControl(value = ''): FormControl<string> {
-    return this.fb.control(value, [Validators.required, Validators.maxLength(100)]);
+    return this.fb.control(value, [Validators.maxLength(100)]);
   }
 
   private normalizePoNumbers(values: string[]): string[] | undefined {

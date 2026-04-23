@@ -194,3 +194,134 @@
 	overflow-y: auto;
 	padding-right: 0.25rem;
 }
+
+/* Professional Masters Tab Styles */
+.masters-tabs-container {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
+.masters-tabs-container .btn {
+	padding: 0.5rem 1rem;
+	font-size: 0.95rem;
+	font-weight: 500;
+	border-radius: 0.5rem;
+	transition: all 0.25s ease;
+	white-space: nowrap;
+}
+
+.masters-tabs-container .btn-primary {
+	background: linear-gradient(135deg, #2d79f3 0%, #1a5ed1 100%);
+	border: none;
+	box-shadow: 0 4px 12px rgba(26, 94, 209, 0.2);
+}
+
+.masters-tabs-container .btn-primary:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 16px rgba(26, 94, 209, 0.3);
+}
+
+.masters-tabs-container .btn-outline-secondary {
+	border-color: #d8e1ee;
+	color: #596579;
+	background: var(--bs-body-bg);
+}
+
+.masters-tabs-container .btn-outline-secondary:hover {
+	border-color: #5b8def;
+	background: #f8fbff;
+	color: #2d79f3;
+}
+
+/* Search Input Enhancement */
+.masters-search-box {
+	position: relative;
+}
+
+.masters-search-box .form-control-sm {
+	padding: 0.5rem 2rem 0.5rem 0.75rem;
+	border: 1px solid #d8e1ee;
+	border-radius: 0.5rem;
+	background: var(--bs-body-bg);
+	transition: all 0.2s ease;
+	font-size: 0.95rem;
+}
+
+.masters-search-box .form-control-sm:focus {
+	border-color: #5b8def;
+	box-shadow: 0 0 0 0.2rem rgba(91, 141, 239, 0.1);
+	outline: none;
+}
+
+.masters-search-box .btn-ghost {
+	color: #8a97b0;
+	font-size: 1.1rem;
+}
+
+.masters-search-box .btn-ghost:hover {
+	color: #2d79f3;
+}
+
+/* Scrollable Masters Container */
+.masters-content-container {
+	background: var(--bs-body-bg);
+	border-radius: 0.75rem;
+	border: 1px solid #e8edf5;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+}
+
+.masters-content-container .masters-header {
+	background: linear-gradient(180deg, #fafbfc 0%, #f5f8fb 100%);
+	border-bottom: 1px solid #e8edf5;
+	padding: 1rem 1.5rem;
+	flex-shrink: 0;
+}
+
+.masters-content-container .masters-body {
+	flex: 1;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding: 1rem 1.5rem;
+	scroll-behavior: smooth;
+}
+
+.masters-content-container .masters-body::-webkit-scrollbar {
+	width: 0.5rem;
+}
+
+.masters-content-container .masters-body::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.masters-content-container .masters-body::-webkit-scrollbar-thumb {
+	background: #d8e1ee;
+	border-radius: 0.25rem;
+	transition: background 0.2s ease;
+}
+
+.masters-content-container .masters-body::-webkit-scrollbar-thumb:hover {
+	background: #5b8def;
+}
+
+/* Master Item Styling */
+.master-item {
+	border: 1px solid #e8edf5;
+	border-radius: 0.6rem;
+	padding: 0.75rem 1rem;
+	background: var(--bs-body-bg);
+	margin-bottom: 0.5rem;
+	transition: all 0.2s ease;
+}
+
+.master-item:hover {
+	border-color: #5b8def;
+	box-shadow: 0 2px 8px rgba(45, 121, 243, 0.1);
+	transform: translateX(2px);
+}
+
+.transition-all {
+	transition: all 0.25s ease;
+}

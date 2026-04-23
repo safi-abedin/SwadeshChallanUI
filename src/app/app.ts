@@ -69,6 +69,8 @@ export class App {
   readonly hasPreviousPage = computed(() => this.pageNumber() > 1);
   
   readonly activeTab = signal<TabKey>('challan');
+  readonly activeMasterTab = signal<'company' | 'buyer' | 'product'>('company');
+  readonly masterSearchQuery = signal('');
   readonly isSubmitting = signal(false);
   readonly isUpdating = signal(false);
   readonly isDeleting = signal(false);
@@ -85,12 +87,20 @@ export class App {
   readonly deletingChallan = signal<Challan | null>(null);
   readonly isDeleteModalOpen = signal(false);
 
+  // Post-creation view confirmation
+  readonly showViewConfirmation = signal(false);
+  readonly newlyChallanId = signal<number | null>(null);
+
   constructor() {
     this.loadInitialData();
   }
 
   setActiveTab(tab: TabKey): void {
     this.activeTab.set(tab);
+  }
+
+  setActiveMasterTab(tab: 'company' | 'buyer' | 'product'): void {
+    this.activeMasterTab.set(tab);
   }
 
   logout(): void {
@@ -195,14 +205,30 @@ export class App {
   onChallanFormSubmit(payload: ChallanDto): void {
     this.isSubmitting.set(true);
     this.api.createChallan(payload).subscribe({
-      next: () => {
+      next: (challanId) => {
         this.refreshChallans();
         this.toaster.success('Challan created', 'Challan created successfully.');
-        this.activeTab.set('reports');
+        this.newlyChallanId.set(challanId);
+        this.showViewConfirmation.set(true);
       },
       error: () => this.toaster.error('Action failed', 'Unable to create challan. Please try again.'),
       complete: () => this.isSubmitting.set(false)
     });
+  }
+
+  viewNewChallan(): void {
+    const id = this.newlyChallanId();
+    if (id) {
+      this.viewChallan(id);
+      this.showViewConfirmation.set(false);
+      this.newlyChallanId.set(null);
+    }
+  }
+
+  skipViewNewChallan(): void {
+    this.showViewConfirmation.set(false);
+    this.newlyChallanId.set(null);
+    this.activeTab.set('reports');
   }
 
   // Challan List Handlers
