@@ -65,8 +65,9 @@
 }
 
 .master-list {
-	max-height: 16rem;
-	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 0.65rem;
 }
 
 .table-action-col {
@@ -322,15 +323,60 @@
 	border: 1px solid #e8edf5;
 	border-radius: 0.6rem;
 	padding: 0.75rem 1rem;
-	background: var(--bs-body-bg);
-	margin-bottom: 0.5rem;
+	background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
 	transition: all 0.2s ease;
 }
 
 .master-item:hover {
 	border-color: #5b8def;
 	box-shadow: 0 2px 8px rgba(45, 121, 243, 0.1);
-	transform: translateX(2px);
+}
+
+.master-card {
+	background: transparent;
+}
+
+.master-toolbar {
+	gap: 0.75rem;
+}
+
+.master-actions {
+	flex-wrap: wrap;
+}
+
+.master-action-btn {
+	min-width: 5.25rem;
+}
+
+.masters-shell {
+	background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+}
+
+.masters-shell-body {
+	min-height: 30rem;
+}
+
+.masters-panel-body {
+	min-height: 22rem;
+}
+
+@media (max-width: 767.98px) {
+	.master-item {
+		padding: 0.8rem;
+	}
+
+	.master-actions {
+		width: 100%;
+	}
+
+	.master-action-btn {
+		flex: 1;
+	}
+
+	.masters-shell-body,
+	.masters-panel-body {
+		min-height: 0;
+	}
 }
 
 .transition-all {

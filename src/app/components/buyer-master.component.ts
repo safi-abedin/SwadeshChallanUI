@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal, computed } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../services/api';
 import { ToasterService } from '../services/toaster';
 import { Buyer, CreateBuyerRequest, UpdateBuyerRequest } from '../models/challan.models';
@@ -16,17 +17,17 @@ type BuyerFormGroup = FormGroup<{
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, DeleteConfirmationModalComponent],
   template: `
-    <section class="card h-100 border-0 shadow-sm">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+    <section class="card border-0 shadow-sm master-card">
+      <div class="card-body p-3 p-lg-4">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center master-toolbar mb-3">
           <h2 class="h5 mb-0">Buyer Master</h2>
           <button type="button" class="btn btn-primary btn-sm" (click)="openCreateModal()">Add Buyer</button>
         </div>
 
-        <div class="vstack gap-2" aria-label="Buyer list">
+        <div class="master-list" aria-label="Buyer list">
           @for (buyer of filteredBuyers(); track buyer.id) {
-            <div class="master-item d-flex align-items-center justify-content-between gap-2">
-              <div class="fw-semibold">
+            <div class="master-item d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mt-3 border-bottom pb-2">
+              <div class="fw-semibold text-break">
                 @for (segment of highlightSegments(buyer.name); track $index) {
                   @if (segment.matched) {
                     <mark class="search-highlight">{{ segment.text }}</mark>
@@ -35,9 +36,9 @@ type BuyerFormGroup = FormGroup<{
                   }
                 }
               </div>
-              <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-outline-warning btn-sm" (click)="startEdit(buyer)">Edit</button>
-                <button type="button" class="btn btn-outline-danger btn-sm" (click)="confirmDeleteBuyer(buyer)">Delete</button>
+              <div class="master-actions d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-warning btn-sm master-action-btn" (click)="startEdit(buyer)">Edit</button>
+                <button type="button" class="btn btn-outline-danger btn-sm master-action-btn" (click)="confirmDeleteBuyer(buyer)">Delete</button>
               </div>
             </div>
           } @empty {
@@ -206,7 +207,17 @@ export class BuyerMasterComponent {
         this.onBuyerDeleted.emit();
         this.toaster.info('Buyer removed', 'Buyer deleted successfully.');
       },
-      error: () => this.toaster.error('Action failed', 'Unable to delete buyer.'),
+      error: (error: unknown) => {
+        this.cancelDeleteBuyer();
+
+        const message = this.extractErrorMessage(error, 'Unable to delete buyer right now.');
+        if (error instanceof HttpErrorResponse && error.status === 409) {
+          this.toaster.warning('Cannot delete buyer', message, 7000);
+          return;
+        }
+
+        this.toaster.error('Action failed', message);
+      },
       complete: () => this.isDeleting.set(false)
     });
   }
@@ -243,5 +254,27 @@ export class BuyerMasterComponent {
       },
       error: () => this.toaster.error('Action failed', 'Unable to update buyer right now.')
     });
+  }
+
+  private extractErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
+    }
+
+    if (typeof error.error === 'string' && error.error.trim().length > 0) {
+      return error.error.trim();
+    }
+
+    if (
+      error.error &&
+      typeof error.error === 'object' &&
+      'message' in error.error &&
+      typeof error.error.message === 'string' &&
+      error.error.message.trim().length > 0
+    ) {
+      return error.error.message.trim();
+    }
+
+    return fallback;
   }
 }

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, output, signal, computed } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ApiService } from '../services/api';
 import { ToasterService } from '../services/toaster';
 import { Company, CreateCompanyRequest, UpdateCompanyRequest } from '../models/challan.models';
@@ -17,18 +18,18 @@ type CompanyFormGroup = FormGroup<{
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, DeleteConfirmationModalComponent],
   template: `
-    <section class="card h-100 border-0 shadow-sm">
-      <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
+    <section class="card border-0 shadow-sm master-card">
+      <div class="card-body p-3 p-lg-4">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center master-toolbar mb-3">
           <h2 class="h5 mb-0">Company Master</h2>
           <button type="button" class="btn btn-primary btn-sm" (click)="openCreateModal()">Add Company</button>
         </div>
 
-        <div class="vstack gap-2 master-list" aria-label="Company list">
+        <div class="master-list" aria-label="Company list">
           @for (company of filteredCompanies(); track company.id) {
-            <div class="master-item d-flex align-items-start justify-content-between gap-2">
-              <div>
-                <div class="fw-semibold">
+            <div class="master-item d-flex flex-column flex-md-row align-items-start justify-content-between gap-3 mt-3 border-bottom pb-2">
+              <div class="text-break">
+                <div class="fw-semibold mb-1">
                   @for (segment of highlightSegments(company.name); track $index) {
                     @if (segment.matched) {
                       <mark class="search-highlight">{{ segment.text }}</mark>
@@ -37,7 +38,7 @@ type CompanyFormGroup = FormGroup<{
                     }
                   }
                 </div>
-                <div class="text-body-secondary">
+                <div class="text-body-secondary small">
                   @for (segment of highlightSegments(company.address); track $index) {
                     @if (segment.matched) {
                       <mark class="search-highlight">{{ segment.text }}</mark>
@@ -47,9 +48,9 @@ type CompanyFormGroup = FormGroup<{
                   }
                 </div>
               </div>
-              <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-outline-warning btn-sm" (click)="startEdit(company)">Edit</button>
-                <button type="button" class="btn btn-outline-danger btn-sm" (click)="confirmDeleteCompany(company)">Delete</button>
+              <div class="master-actions d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-warning btn-sm master-action-btn" (click)="startEdit(company)">Edit</button>
+                <button type="button" class="btn btn-outline-danger btn-sm master-action-btn" (click)="confirmDeleteCompany(company)">Delete</button>
               </div>
             </div>
           } @empty {
@@ -232,7 +233,17 @@ export class CompanyMasterComponent {
         this.onCompanyDeleted.emit();
         this.toaster.info('Company removed', 'Company deleted successfully.');
       },
-      error: () => this.toaster.error('Action failed', 'Unable to delete company.'),
+      error: (error: unknown) => {
+        this.cancelDeleteCompany();
+
+        const message = this.extractErrorMessage(error, 'Unable to delete company right now.');
+        if (error instanceof HttpErrorResponse && error.status === 409) {
+          this.toaster.warning('Cannot delete company', message, 7000);
+          return;
+        }
+
+        this.toaster.error('Action failed', message);
+      },
       complete: () => this.isDeleting.set(false)
     });
   }
@@ -272,5 +283,27 @@ export class CompanyMasterComponent {
       },
       error: () => this.toaster.error('Action failed', 'Unable to update company right now.')
     });
+  }
+
+  private extractErrorMessage(error: unknown, fallback: string): string {
+    if (!(error instanceof HttpErrorResponse)) {
+      return fallback;
+    }
+
+    if (typeof error.error === 'string' && error.error.trim().length > 0) {
+      return error.error.trim();
+    }
+
+    if (
+      error.error &&
+      typeof error.error === 'object' &&
+      'message' in error.error &&
+      typeof error.error.message === 'string' &&
+      error.error.message.trim().length > 0
+    ) {
+      return error.error.message.trim();
+    }
+
+    return fallback;
   }
 }

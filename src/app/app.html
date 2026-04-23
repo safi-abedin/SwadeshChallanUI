@@ -74,8 +74,8 @@
     }
 
     @if (activeTab() === 'masters') {
-      <div class="card border-0 shadow-sm h-auto">
-        <div class="card-body p-0 d-flex flex-column" style="height: 100vh; max-height: calc(100vh - 250px);">
+      <div class="card border-0 shadow-sm h-auto masters-shell">
+        <div class="card-body p-0 d-flex flex-column masters-shell-body">
           <!-- Professional Tab Header -->
           <div class="px-4 py-3 border-bottom bg-body-tertiary">
             <h2 class="h5 mb-3 text-dark fw-semibold">Master Data Management</h2>
@@ -139,7 +139,7 @@
           </div>
 
           <!-- Scrollable Master List Container -->
-          <div class="flex-grow-1 overflow-y-auto px-4 py-3" style="min-height: 400px;">
+          <div class="flex-grow-1 overflow-y-auto px-3 px-md-4 py-3 masters-panel-body">
             @if (activeMasterTab() === 'company') {
               <app-company-master 
                 [companies]="companies()"
