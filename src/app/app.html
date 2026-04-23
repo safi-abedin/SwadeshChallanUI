@@ -93,7 +93,7 @@
                 aria-label="Company Master Tab"
                 role="tab"
                 [attr.aria-selected]="activeMasterTab() === 'company'">
-                <span class="me-2">🏢</span>Company Master
+                Company Master
               </button>
               <button 
                 type="button" 
@@ -104,7 +104,7 @@
                 aria-label="Buyer Master Tab"
                 role="tab"
                 [attr.aria-selected]="activeMasterTab() === 'buyer'">
-                <span class="me-2">👤</span>Buyer Master
+               Buyer Master
               </button>
               <button 
                 type="button" 
@@ -115,7 +115,7 @@
                 aria-label="Product Master Tab"
                 role="tab"
                 [attr.aria-selected]="activeMasterTab() === 'product'">
-                <span class="me-2">📦</span>Product Master
+                Product Master
               </button>
             </div>
 
@@ -124,7 +124,7 @@
               <input 
                 type="text" 
                 class="form-control form-control-sm pe-4" 
-                placeholder="🔍 Search (supports regex)... e.g., '^A|^B' for names starting with A or B"
+                placeholder="🔍 Search e.g., '^A|^B' for names starting with A or B"
                 [value]="masterSearchQuery()"
                 (input)="masterSearchQuery.set($any($event.target).value)"
                 aria-label="Search masters with regex support">
