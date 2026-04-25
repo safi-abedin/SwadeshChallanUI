@@ -4,12 +4,16 @@ import {
   Buyer,
   Challan,
   ChallanDto,
+  ChallanItem,
+  ChallanItemUnit,
   Company,
   CreateBuyerRequest,
   CreateCompanyRequest,
   CreateProductRequest,
   PaginatedResponse,
   Product,
+  ReferenceItem,
+  Style,
   UpdateBuyerRequest,
   UpdateCompanyRequest,
   UpdateProductRequest
@@ -19,10 +23,24 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs';
 
 type BackendPoNo = { value?: unknown; Value?: unknown } | string;
-type BackendChallan = Omit<Challan, 'poNos'> & {
+type BackendReferenceItem = Omit<ReferenceItem, 'packets'> & {
+  packets?: unknown;
+};
+
+type BackendChallanItem = Omit<ChallanItem, 'unit' | 'referenceItems'> & {
+  unit?: unknown;
+  referenceItems?: BackendReferenceItem[];
+};
+
+type BackendStyle = Omit<Style, 'challanItems'> & {
+  challanItems?: BackendChallanItem[];
+};
+
+type BackendChallan = Omit<Challan, 'poNos' | 'styles'> & {
   poNos?: BackendPoNo[];
   PONos?: BackendPoNo[];
   pONos?: BackendPoNo[];
+  styles?: BackendStyle[];
 };
 
 @Injectable({
@@ -151,8 +169,28 @@ export class ApiService {
   private normalizeChallan(challan: BackendChallan): Challan {
     return {
       ...challan,
-      poNos: this.extractPoNumbers(challan)
+      poNos: this.extractPoNumbers(challan),
+      styles: (challan.styles ?? []).map((style) => ({
+        ...style,
+        challanItems: (style.challanItems ?? []).map((item) => ({
+          ...item,
+          unit: this.normalizeChallanItemUnit(item.unit),
+          referenceItems: (item.referenceItems ?? []) as ReferenceItem[]
+        }))
+      }))
     };
+  }
+
+  private normalizeChallanItemUnit(unit: unknown): ChallanItemUnit {
+    if (unit === ChallanItemUnit.Inch || unit === 'Inch' || unit === 0 || unit === '0') {
+      return ChallanItemUnit.Inch;
+    }
+
+    if (unit === ChallanItemUnit.Cm || unit === 'Cm' || unit === 1 || unit === '1') {
+      return ChallanItemUnit.Cm;
+    }
+
+    return ChallanItemUnit.Cm;
   }
 
   private extractPoNumbers(challan: BackendChallan): string[] | undefined {
