@@ -14,12 +14,18 @@ export interface Product {
   name: string;
 }
 
+export enum ChallanItemUnit {
+  Inch = 0,
+  Cm = 1
+}
+
 export interface ChallanItem {
   id?: number;
   description?: string;
   length: number;
   width: number;
   height?: number;
+  unit?: ChallanItemUnit;
   ply: number;
   caseOrPacket?: number;
   packets?: string[];
@@ -109,6 +115,7 @@ export interface ChallanItemDto {
   length: number;
   width: number;
   height?: number;
+  unit?: ChallanItemUnit;
   ply: number;
   caseOrPacket?: number;
   packets?: string[];

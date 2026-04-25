@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject, input, output, computed, signal } from '@angular/core';
 import { FormArray, FormControl, FormGroup, NonNullableFormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Company, Buyer, ChallanDto, StyleDto, ChallanItemDto, Style, ChallanItem, ReferenceItem, Product } from '../models/challan.models';
+import { Company, Buyer, ChallanDto, StyleDto, ChallanItemDto, Style, ChallanItem, ReferenceItem, Product, ChallanItemUnit } from '../models/challan.models';
 import { ToasterService } from '../services/toaster';
 
 type ChallanItemFormGroup = FormGroup<{
@@ -9,6 +9,7 @@ type ChallanItemFormGroup = FormGroup<{
   length: FormControl<number>;
   width: FormControl<number>;
   height: FormControl<number | null>;
+  unit: FormControl<ChallanItemUnit>;
   ply: FormControl<number>;
   caseOrPacket: FormControl<number | null>;
   totalQuantity: FormControl<number | null>;
@@ -162,6 +163,7 @@ type ChallanFormGroup = FormGroup<{
                             <div class="col-6 col-lg-2"><label class="form-label">Length <span class="text-danger">*</span></label><input type="number" class="form-control" formControlName="length" [class.is-invalid]="showError(itemGroup.controls.length)"></div>
                             <div class="col-6 col-lg-2"><label class="form-label">Width <span class="text-danger">*</span></label><input type="number" class="form-control" formControlName="width" [class.is-invalid]="showError(itemGroup.controls.width)"></div>
                             <div class="col-6 col-lg-2"><label class="form-label">Height</label><input type="number" class="form-control" formControlName="height"></div>
+                            <div class="col-6 col-lg-2"><label class="form-label">Unit</label><select class="form-select" formControlName="unit"><option [ngValue]="challanItemUnit.Cm">Cm</option><option [ngValue]="challanItemUnit.Inch">Inch</option></select></div>
                             <div class="col-6 col-lg-2"><label class="form-label">Ply <span class="text-danger">*</span></label><input type="number" class="form-control" formControlName="ply" [class.is-invalid]="showError(itemGroup.controls.ply)"></div>
                             <div class="col-6 col-lg-2"><label class="form-label">Case/Pkt</label><input type="number" class="form-control" formControlName="caseOrPacket"></div>
                             <div class="col-6 col-lg-2"><label class="form-label">Total Quantity</label><input type="number" class="form-control" formControlName="totalQuantity"></div>
@@ -241,6 +243,7 @@ type ChallanFormGroup = FormGroup<{
 export class ChallanFormComponent {
   private readonly fb = inject(NonNullableFormBuilder);
   private readonly toaster = inject(ToasterService);
+  readonly challanItemUnit = ChallanItemUnit;
 
   readonly companies = input.required<Company[]>();
   readonly buyers = input.required<Buyer[]>();
@@ -378,6 +381,7 @@ export class ChallanFormComponent {
             length: item.length,
             width: item.width,
             height: item.height ?? undefined,
+          unit: item.unit,
             ply: item.ply,
             caseOrPacket: item.caseOrPacket ?? undefined,
             totalQuantity: item.totalQuantity ?? undefined,
@@ -443,6 +447,7 @@ export class ChallanFormComponent {
       length: this.fb.control(item?.length ?? 0, [Validators.required, Validators.min(0.01)]),
       width: this.fb.control(item?.width ?? 0, [Validators.required, Validators.min(0.01)]),
       height: this.fb.control(item?.height ?? null, [Validators.min(0)]),
+      unit: this.fb.control(item?.unit ?? ChallanItemUnit.Cm),
       ply: this.fb.control(item?.ply ?? 1, [Validators.required, Validators.min(1)]),
       caseOrPacket: this.fb.control(item?.caseOrPacket ?? null),
       totalQuantity: this.fb.control(item?.totalQuantity ?? null),

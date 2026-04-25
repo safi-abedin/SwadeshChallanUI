@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgOptimizedImage } from '@angular/common';
-import { Buyer, Challan, ChallanItem, Company, Style } from '../models/challan.models';
+import { Buyer, Challan, ChallanItem, ChallanItemUnit, Company, Style } from '../models/challan.models';
 
 @Component({
   selector: 'app-view-challan-modal',
@@ -435,7 +435,11 @@ export class ViewChallanModalComponent {
       dimensions.push(item.height);
     }
 
-    return `${dimensions.join(' X ')} Cm`;
+    return `${dimensions.join(' X ')} ${this.getUnitLabel(item.unit)}`;
+  }
+
+  private getUnitLabel(unit: ChallanItemUnit | undefined): string {
+    return unit === ChallanItemUnit.Inch ? 'Inch' : 'Cm';
   }
 
   private compareChallanItems(left: ChallanItem | undefined, right: ChallanItem | undefined): number {
